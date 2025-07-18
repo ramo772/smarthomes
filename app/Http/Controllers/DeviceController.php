@@ -12,7 +12,7 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        //
+        return Device::all();
     }
 
     /**
@@ -28,8 +28,13 @@ class DeviceController extends Controller
      */
     public function store(Request $request)
     {
-        $device = Device::create($request->toArray());
-        return $device;
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+        ]);
+
+        $device = Device::create($data);
+
+        return response()->json($device, 201);
     }
 
     /**
@@ -37,7 +42,7 @@ class DeviceController extends Controller
      */
     public function show(Device $device)
     {
-        //
+        return $device;
     }
 
     /**
@@ -53,7 +58,13 @@ class DeviceController extends Controller
      */
     public function update(Request $request, Device $device)
     {
-        //
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+        ]);
+
+        $device->update($data);
+
+        return $device;
     }
 
     /**
@@ -61,6 +72,8 @@ class DeviceController extends Controller
      */
     public function destroy(Device $device)
     {
-        //
+        $device->delete();
+
+        return response()->noContent();
     }
 }
